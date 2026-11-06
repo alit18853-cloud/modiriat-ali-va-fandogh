@@ -1,4 +1,3 @@
-
 name: Build Android APK
 
 on:
@@ -25,14 +24,22 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          accept-android-sdk-licenses: false
+
+      - name: Accept Android licenses
+        run: yes | sdkmanager --licenses
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
 
       - name: Extract project
-        run: |
-          unzip -o Modiriat-Ali-Fandogh-Android-Project.zip -d android-src
+        run: unzip -o Modiriat-Ali-Fandogh-Android-Project.zip -d android-src
 
       - name: Build APK
-        run: |
-          gradle --no-daemon -p android-src/ModiriatTalebiAndroid assembleDebug
+        run: gradle --no-daemon -p android-src/ModiriatTalebiAndroid assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
